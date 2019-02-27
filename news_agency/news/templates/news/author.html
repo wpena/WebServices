@@ -1,0 +1,14 @@
+<!-- templates/author.html -->
+
+{% extends "news/base.html" %}
+{% block content %}
+{% for author in authors %}
+<article class="media content-section">
+    <div class="media-body">
+        <h5 class="author-title">{{ author.author_name }}</h5>
+    </div>
+</article>
+{% endfor %}
+{% endblock content %}
+
+
