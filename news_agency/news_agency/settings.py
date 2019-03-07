@@ -25,7 +25,7 @@ SECRET_KEY = '!ife@=6@b^sw!0*0te(dab*)%t3jv+mfj7dox12qi%ey!2(mq6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'news',
     'users',
-    'crispy_forms',
     'rest_framework',
 ]
 
@@ -47,7 +46,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'cwk1.disable.DisableCsrf',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -124,7 +122,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4' #new
-
-LOGIN_REDIRECT_URL = 'news-home' #new
-LOGIN_URL = 'login' #new
+LOGIN_URL = '/api/login/'

@@ -9,7 +9,7 @@ import uuid
 
 class Author(models.Model):
     author_name = models.CharField(max_length=64)
-    user = models.ForeignKey(User, related_name='User',
+    user = models.OneToOneField(User, related_name='User',
                              null=True, on_delete=models.CASCADE)
 
     def __str__(self):

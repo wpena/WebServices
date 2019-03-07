@@ -3,65 +3,56 @@ from requests import Request, Session
 import getpass
 from getpass import getpass
 import stdiomask
+import pprint
+from django.http import HttpResponse
 
-sesh = requests.Session()
+session = requests.Session()
 
 #--------------------------------------------------------------------------------------------------------#
-                                            ## LOGIN ##
+## LOGIN ##
 #--------------------------------------------------------------------------------------------------------#
 login_url = "http://127.0.0.1:8000/api/login/"
 
-headers = {
-    'authorization': "Basic Og==",
-    'content-type': "application/x-www-form-urlencoded",
-}
-
+print("Welcome to Pena's News Agency!")
 def login():
     usrname = input("Please enter your username: ")
     passwrd = stdiomask.getpass("Please enter your password: ")
-    res = sesh.post(login_url, {'username': usrname,
-                                'password': passwrd}, headers=headers,)
+    res = session.post(login_url, data={'username': usrname,
+                                'password': passwrd})
     if (res.status_code == 200):
         print("Status Code: " + str(res.status_code))
-        print("Welcome to Pena's News Agency!")
     print(res.text)
-    
+    if (res.status_code == 400):
+        print("invalid login")
+
 #--------------------------------------------------------------------------------------------------------#
 
 #--------------------------------------------------------------------------------------------------------#
-                                            ## LOGOUT ##             
+    ## LOGOUT ##
 #--------------------------------------------------------------------------------------------------------#
 logout_url = "http://127.0.0.1:8000/api/logout/"
 
+
 def logout():
-    res = sesh.post(logout_url)
+    res = session.post(logout_url)
     if (res.status_code == 200):
-        print("You have successfully logged out!")
+        print("Successfully logged out. Au Revoir!")
         print("Status Code: " + str(res.status_code))
 
-
 #--------------------------------------------------------------------------------------------------------#
 
 #--------------------------------------------------------------------------------------------------------#
-                                            ## POST STORY ##
+        ## POST STORY ##
 #--------------------------------------------------------------------------------------------------------#
 post_url = "http://127.0.0.1:8000/api/poststory/"
 
-payload = {
-    'headline': 'Drake Baby Momma',
-    'author': 'TestUser2',
-    'story_cat': 'art',
-    'story_region': 'us',
-    'story_details': 'Some Unknown youT came out of nowhere.'
-}
-
-headers = {
-    'authorization': "Basic Og==",
-    'content-type': "application/x-www-form-urlencoded",
-}
-
 def post():
-    res = sesh.post(post_url, data=payload, headers=headers)
+    headline = input("Enter Headline: ")
+    story_cat = input("Enter Category: ")
+    story_region = input("Enter Region: ")
+    story_details = input("Enter Details: ")
+
+    res = session.post(post_url, params={'headline': headline, 'story_cat': story_cat, 'story_region': story_region, 'story_details': story_details})
     if(res.status_code == 200):
         print("Status Code: " + str(res.status_code) + " \n")
         print("Story Created \n")
@@ -70,30 +61,41 @@ def post():
 
 
 #--------------------------------------------------------------------------------------------------------#
-                                            ## DELETE STORY ##
+        ## DELETE STORY ##
 #--------------------------------------------------------------------------------------------------------#
 
-# delete_url = "http://127.0.0.1:8000/api//deletestory/"
+delete_url = "http://127.0.0.1:8000/api/deletestory"
 
-# payload = {
-#     'story_key': '15'
+# pay_load = {
+#     #'id': '1',
 # }
 
-# headers = {
-#     'authorization': "Basic Og==",
-#     'content-type': "application/x-www-form-urlencoded",
-# }
-
-# def delete():
-#     res = sesh.post(delete_url, data=payload, headers=headers)
-#     if(res.status_code == 200):
-#         print("Status Code: " + str(res.status_code) + " \n")
-        #print("Story Deleted \n")
+def delete():
+    #res = session.post(delete_url)
+    res = session.post(delete_url, params=id)
+    if(res.status_code == 200):
+        print("Status Code: " + str(res.status_code) + " \n")
+        print("Story Deleted \n")
 
 #--------------------------------------------------------------------------------------------------------#
 
 #--------------------------------------------------------------------------------------------------------#
-                                            ## COMMANDS ##
+        ## DELETE STORY ##
+#--------------------------------------------------------------------------------------------------------#
+list_url = "http://directory.pythonanywhere.com/api/list/"
+
+def list_news():
+
+    res = requests.request("GET", list_url)
+    if(res.status_code == 200):
+        print("Status Code: " + str(res.status_code) + " \n")
+    pp = pprint.PrettyPrinter(indent=5)
+    pp.pprint(res.text)
+
+#--------------------------------------------------------------------------------------------------------#
+
+#--------------------------------------------------------------------------------------------------------#
+        ## COMMANDS ##
 #--------------------------------------------------------------------------------------------------------#
 def Service():
     print(""" Hello, below is a list of available service commands...
@@ -106,6 +108,7 @@ def Service():
     6. Delete - Type 'delete <story_key>' command for this service
     7. Exit   - Type 'exit' command to exit
  """)
+
 
 Service()
 
@@ -121,10 +124,12 @@ while(1):
     if (user_input == 'post'):
         post()
         print("")
-    if (user_input == 'delete' ):
+    if (user_input == 'delete' ): 
         delete()
+        print("")
+    if (user_input == 'list'):
+        list_news()
         print("")
     if (user_input == 'exit'):
         exit()
         print("")
-
