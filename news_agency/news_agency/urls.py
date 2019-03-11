@@ -16,14 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from users import views as user_views
-from django.contrib.auth.decorators import login_required
+#from django.contrib.auth.decorators import login_required
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/login/', user_views.user_login),
     path('api/logout/', user_views.user_logout),
-    path('api/poststory/', login_required(user_views.poststory)),
+    path('api/poststory/', user_views.poststory),
     path('api/getstories/', user_views.getstories),
     path('api/deletestory/', user_views.deletestory),
 
